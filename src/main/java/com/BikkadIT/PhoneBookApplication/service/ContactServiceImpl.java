@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.BikkadIT.PhoneBookApplication.entities.Contact;
+import com.BikkadIT.PhoneBookApplication.props.AppConstants;
 import com.BikkadIT.PhoneBookApplication.repository.ContactRepository;
 
 @Service
@@ -70,7 +71,7 @@ public class ContactServiceImpl implements ContactServiceI {
 		Contact contact = contactRepository.findById(id).get();
 		if(contact !=null) {
 		
-			contact.setActiveSwitch('N');
+			contact.setActiveSwitch(AppConstants.N);
 			contactRepository.save(contact);
 			return true;
 		}else

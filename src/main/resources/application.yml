@@ -1,0 +1,35 @@
+logging:
+  file:
+    name: MyApp1.log
+  level:
+    root: INFO
+server:
+  port: 9090
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost/PhoneBookApp-04
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+ 
+app1:
+   messages:
+     saveSuccess: Contact Saved Successfully In DB
+     saveFail : Contact not Saved Successfully
+     updateSuccess : Contact Updated  Successfully
+     updateFail : Contact not Updated Successfully
+     deleteSuccess: Contact Deleted  Successfully
+     deleteFail : Contact not Deleted  Successfully
+      
+      
+      

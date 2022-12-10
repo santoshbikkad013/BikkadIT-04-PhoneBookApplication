@@ -1,6 +1,7 @@
 package com.BikkadIT.PhoneBookApplication.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.BikkadIT.PhoneBookApplication.entities.Contact;
+import com.BikkadIT.PhoneBookApplication.props.ApiProps;
+import com.BikkadIT.PhoneBookApplication.props.AppConstants;
 import com.BikkadIT.PhoneBookApplication.service.ContactServiceI;
 
 @RestController
@@ -23,17 +26,22 @@ public class ContactController {
 
 	@Autowired
 	private ContactServiceI contactServiceI;
+	
+	@Autowired
+	private ApiProps apiProps;
 
 	@PostMapping(value = "/saveContact", consumes = "application/json")
 	public ResponseEntity<String> saveContact(@RequestBody Contact contact) {
 
 		boolean saveContact = contactServiceI.saveContact(contact);
 
+		Map<String,String> messages = apiProps.getMessages();
+		System.out.println(messages);
 		if (saveContact) {
-			String msg = "Contact Saved Successfully";
+			String msg = messages.get(AppConstants.SUCCESS);
 			return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("Contact not Saved Successfully", HttpStatus.CREATED);
+			return new ResponseEntity<String>(messages.get(AppConstants.FAIL), HttpStatus.CREATED);
 
 		}
 	}
@@ -43,7 +51,7 @@ public class ContactController {
 
 		List<Contact> allContact = contactServiceI.getAllContact();
 		Stream<Contact> stream = allContact.stream();
-		Stream<Contact> filter = stream.filter((contact) -> contact.getActiveSwitch()=='Y');
+		Stream<Contact> filter = stream.filter((contact) -> contact.getActiveSwitch()==AppConstants.Y);
 		List<Contact> list = filter.collect(Collectors.toList());
 		
 		return new ResponseEntity<List<Contact>>(list, HttpStatus.OK);
@@ -62,11 +70,12 @@ public class ContactController {
 
 		boolean saveContact = contactServiceI.updateContact(contact);
 
+		 Map<String, String> messages = apiProps.getMessages();
 		if (saveContact) {
-			String msg = "Contact Updated  Successfully";
+			String msg =messages.get(AppConstants.UPADTE_SUCCESS);
 			return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("Contact not Updated Successfully", HttpStatus.CREATED);
+			return new ResponseEntity<String>(messages.get(AppConstants.UPDATE_FAIL), HttpStatus.CREATED);
 
 		}
 
@@ -76,11 +85,12 @@ public class ContactController {
 	public ResponseEntity<String> deleteContact(@PathVariable Integer contactId){
 		boolean deleteContact = contactServiceI.deleteContact(contactId);
 		
+		Map<String, String> messages = apiProps.getMessages();
 		if(deleteContact) {
-			String msg = "Contact Deleted  Successfully";
+			String msg = messages.get(AppConstants.DELETE_SUCCESS);
 			return new ResponseEntity<String>(msg, HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<String>("Contact not Deleted Successfully", HttpStatus.CREATED);
+			return new ResponseEntity<String>(messages.get(AppConstants.DELETE_FAIL), HttpStatus.CREATED);
 
 		}
 		
